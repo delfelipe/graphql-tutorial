@@ -1,9 +1,9 @@
-var express = require('express');
-var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
-var crypto = require('crypto');
+const express = require('express');
+const graphqlHTTP = require('express-graphql');
+const { buildSchema } = require('graphql');
+const crypto = require('crypto');
 
-var schema = buildSchema(`
+const schema = buildSchema(`
     input MessageInput {
         content: String,
         author: String
@@ -69,7 +69,7 @@ class Message {
 
 var fakeDataBase = {};
 
-var root = {
+const root = {
     quoteOfTheDay: () => {
         return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
     },
@@ -111,7 +111,7 @@ var root = {
     }
 };
 
-var app = express();
+const app = express();
 app.use(loggingMiddleware);
 app.use('/graphql', graphqlHTTP({
     schema: schema,
