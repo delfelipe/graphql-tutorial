@@ -31,9 +31,15 @@ var schema = buildSchema(`
         random: Float!,
         rollDice(numDice: Int!, numSides: Int): [Int],
         getDie(numSides: Int): RandomDie,
-        getMessage(id: ID!): Message
+        getMessage(id: ID!): Message,
+        ip: String
     }
 `);
+
+function loggingMiddleware(req, res, next) {
+    console.log('ip:', req.ip);
+    next();
+};
 
 class RandomDie {
     constructor(numSides) {
@@ -99,10 +105,14 @@ var root = {
 
         fakeDataBase[id] = input;
         return new Message(id, input);
+    },
+    ip: (args, request) => {
+        return request.ip;
     }
 };
 
 var app = express();
+app.use(loggingMiddleware);
 app.use('/graphql', graphqlHTTP({
     schema: schema,
     rootValue: root,
